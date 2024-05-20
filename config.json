@@ -1,7 +1,5 @@
 {
-    "biobank_path": [
-        "/home/ofeksh2@mta.ac.il/biobank/ukb672220.csv"
-    ],
+    "biobank_path": "/home/ofeksh2@mta.ac.il/biobank/ukb673540.csv",
     "features_code_list": [
         "eid",
         "41202-0.0",

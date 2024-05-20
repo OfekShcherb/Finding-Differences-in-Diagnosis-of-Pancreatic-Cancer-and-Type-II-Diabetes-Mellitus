@@ -1,6 +1,6 @@
 import json
 
-biobank_path = "/home/ofeksh2@mta.ac.il/biobank/ukb672220.csv",
+biobank_path = "/home/ofeksh2@mta.ac.il/biobank/ukb672220.csv"
 features_code_list = []
 features_name_list = []
 with open('C:/Users/Win10/Desktop/FinalProject/features.txt') as features_file:
