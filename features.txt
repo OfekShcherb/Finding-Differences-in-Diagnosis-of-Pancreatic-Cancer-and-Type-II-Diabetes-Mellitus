@@ -1,5 +1,6 @@
 eid	eid
-41270	Diagnoses - ICD10
+41202	Diagnoses - main ICD10 
+41204	Diagnoses - secondary ICD10
 120114	Persistent or recurrent tiredness, weariness or fatigue that has lasted for at least 6 months
 2966	Age high blood pressure diagnosed
 34	Yead of birth
@@ -31,6 +32,7 @@ eid	eid
 26286	Enhanced PRS for type 2 diabetes (T2D)
 23099	Body fat percentage
 23127	Trunk fat percentage
+84	Cancer year/age first occurred
 30510	Creatinine (enzymatic) in urine
 30500	Microalbumin in urine
 30520	Potassium in urine
