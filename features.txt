@@ -156,94 +156,14 @@ eid	eid
 23021	sag1 antigen for Toxoplasma gondii
 23035	tarp-D F1 antigen for Chlamydia trachomatis
 23036	tarp-D F2 antigen for Chlamydia trachomatis
-23484	Cholesterol in Chylomicrons and Extremely Large VLDL
 23526	Cholesterol in IDL
-23561	Cholesterol in Large HDL
-23533	Cholesterol in Large LDL
-23498	Cholesterol in Large VLDL
-23568	Cholesterol in Medium HDL
-23540	Cholesterol in Medium LDL
-23505	Cholesterol in Medium VLDL
-23575	Cholesterol in Small HDL
-23547	Cholesterol in Small LDL
-23512	Cholesterol in Small VLDL
-23554	Cholesterol in Very Large HDL
-23491	Cholesterol in Very Large VLDL
-23519	Cholesterol in Very Small VLDL
-23580	Cholesterol to Total Lipids in Chylomicrons and Extremely Large VLDL percentage
-23610	Cholesterol to Total Lipids in IDL percentage
-23635	Cholesterol to Total Lipids in Large HDL percentage
-23615	Cholesterol to Total Lipids in Large LDL percentage
-23590	Cholesterol to Total Lipids in Large VLDL percentage
-23640	Cholesterol to Total Lipids in Medium HDL percentage
-23620	Cholesterol to Total Lipids in Medium LDL percentage
-23595	Cholesterol to Total Lipids in Medium VLDL percentage
-23645	Cholesterol to Total Lipids in Small HDL percentage
-23625	Cholesterol to Total Lipids in Small LDL percentage
-23600	Cholesterol to Total Lipids in Small VLDL percentage
-23630	Cholesterol to Total Lipids in Very Large HDL percentage
-23585	Cholesterol to Total Lipids in Very Large VLDL percentage
-23605	Cholesterol to Total Lipids in Very Small VLDL percentage
 23418	Cholesteryl Esters in HDL
 23527	Cholesteryl Esters in IDL
 23417	Cholesteryl Esters in LDL
-23562	Cholesteryl Esters in Large HDL
-23534	Cholesteryl Esters in Large LDL
-23499	Cholesteryl Esters in Large VLDL
-23569	Cholesteryl Esters in Medium HDL
-23541	Cholesteryl Esters in Medium LDL
-23506	Cholesteryl Esters in Medium VLDL
-23576	Cholesteryl Esters in Small HDL
-23548	Cholesteryl Esters in Small LDL
-23513	Cholesteryl Esters in Small VLDL
 23416	Cholesteryl Esters in VLDL
-23555	Cholesteryl Esters in Very Large HDL
-23492	Cholesteryl Esters in Very Large VLDL
-23520	Cholesteryl Esters in Very Small VLDL
-23581	Cholesteryl Esters to Total Lipids in Chylomicrons and Extremely Large VLDL percentage
-23611	Cholesteryl Esters to Total Lipids in IDL percentage
-23636	Cholesteryl Esters to Total Lipids in Large HDL percentage
-23616	Cholesteryl Esters to Total Lipids in Large LDL percentage
-23591	Cholesteryl Esters to Total Lipids in Large VLDL percentage
-23641	Cholesteryl Esters to Total Lipids in Medium HDL percentage
-23621	Cholesteryl Esters to Total Lipids in Medium LDL percentage
-23596	Cholesteryl Esters to Total Lipids in Medium VLDL percentage
-23646	Cholesteryl Esters to Total Lipids in Small HDL percentage
-23626	Cholesteryl Esters to Total Lipids in Small LDL percentage
-23601	Cholesteryl Esters to Total Lipids in Small VLDL percentage
-23631	Cholesteryl Esters to Total Lipids in Very Large HDL percentage
-23586	Cholesteryl Esters to Total Lipids in Very Large VLDL percentage
-23606	Cholesteryl Esters to Total Lipids in Very Small VLDL percentage
-23486	Free Cholesterol in Chylomicrons and Extremely Large VLDL
 23422	Free Cholesterol in HDL
 23528	Free Cholesterol in IDL
 23421	Free Cholesterol in LDL
-23563	Free Cholesterol in Large HDL
-23535	Free Cholesterol in Large LDL
-23500	Free Cholesterol in Large VLDL
-23570	Free Cholesterol in Medium HDL
-23542	Free Cholesterol in Medium LDL
-23507	Free Cholesterol in Medium VLDL
-23577	Free Cholesterol in Small HDL
-23549	Free Cholesterol in Small LDL
-23514	Free Cholesterol in Small VLDL
 23420	Free Cholesterol in VLDL
-23556	Free Cholesterol in Very Large HDL
-23493	Free Cholesterol in Very Large VLDL
-23521	Free Cholesterol in Very Small VLDL
-23582	Free Cholesterol to Total Lipids in Chylomicrons and Extremely Large VLDL percentage
-23612	Free Cholesterol to Total Lipids in IDL percentage
-23637	Free Cholesterol to Total Lipids in Large HDL percentage
-23617	Free Cholesterol to Total Lipids in Large LDL percentage
-23592	Free Cholesterol to Total Lipids in Large VLDL percentage
-23642	Free Cholesterol to Total Lipids in Medium HDL percentage
-23622	Free Cholesterol to Total Lipids in Medium LDL percentage
-23597	Free Cholesterol to Total Lipids in Medium VLDL percentage
-23647	Free Cholesterol to Total Lipids in Small HDL percentage
-23627	Free Cholesterol to Total Lipids in Small LDL percentage
-23602	Free Cholesterol to Total Lipids in Small VLDL percentage
-23632	Free Cholesterol to Total Lipids in Very Large HDL percentage
-23587	Free Cholesterol to Total Lipids in Very Large VLDL percentage
-23607	Free Cholesterol to Total Lipids in Very Small VLDL percentage
 23406	HDL Cholesterol
 23405	LDL Cholesterol
