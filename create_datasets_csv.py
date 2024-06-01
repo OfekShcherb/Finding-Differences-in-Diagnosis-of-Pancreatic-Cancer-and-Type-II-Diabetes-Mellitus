@@ -12,47 +12,53 @@ print('loading config')
 with open('/tmp/pycharm_project_366/config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
-biobank_paths = config['biobank_path']
-features_code_list = config['features_code_list']
+biobank_paths = config['biobank_paths']
+features_code_lists = config['features_code_lists']
 features_name_list = config['features_name_list']
-
+diagnosis_codes = [f'41270-0.{i}' for i in range(100)]
 print('loading dataset')
-dfs = []
-for biobank_path in biobank_paths:
-    df = pd.read_csv(biobank_path, usecols=(lambda x: x in features_code_list), nrows=1000)
-    dfs.append(df)
+chunk_size = 10000
+datasets_chunks = []
+for biobank_path, features in zip(biobank_paths, features_code_lists):
+    chunks = pd.read_csv(biobank_path, usecols=features, chunksize=chunk_size)
+    datasets_chunks.append(chunks)
 
-print(len(config['features_code_list']))
-df = pd.concat(dfs, axis=1)
-df_filled = df.fillna('-1')
-all_diseased_column = df_filled[[f'41270-0.{i}' for i in range(100)]].agg(', '.join, axis=1)
+datasets_chunks = zip(*datasets_chunks)
+for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
+    chunk = pd.concat([chunk_ukb672220, chunk_ukb673316, chunk_ukb673540], axis=1)
+    chunk[diagnosis_codes] = chunk[diagnosis_codes].fillna('-1')
+    all_diseased_column = chunk[diagnosis_codes].agg(', '.join, axis=1)
 
-print('splitting the dataset')
-test_group_df = df.sample(n=100)
-train_group_df = df.drop(test_group_df.index)
+    test_group_df = chunk.sample(n=chunk.shape[0]//5)
+    test_group_df.to_csv('test_data.csv', mode='a', index=False)
+    train_group_df = chunk.drop(test_group_df.index)
 
-diabetes_pattern = r'E11'
-people_with_diabetes_in_test_df = get_people_with_disease(test_group_df, all_diseased_column, diabetes_pattern)
-print(f'people_with_diabetes_in_test_df size: {people_with_diabetes_in_test_df.shape}')
+    diabetes_pattern = r'E11'
+    # people_with_diabetes_in_test_df = get_people_with_disease(test_group_df, all_diseased_column, diabetes_pattern)
 
-pancreatic_cancer_pattern = r'C25'
-people_with_pancreatic_cancer_in_test_df = get_people_with_disease(test_group_df, all_diseased_column,pancreatic_cancer_pattern)
-print(f'people_with_pancreatic_cancer_in_test_df size: {people_with_pancreatic_cancer_in_test_df.shape}')
+    pancreatic_cancer_pattern = r'C25'
+    # people_with_pancreatic_cancer_in_test_df = get_people_with_disease(test_group_df, all_diseased_column,
+    #                                                                   pancreatic_cancer_pattern)
 
-test_group_df.to_csv('test_data.csv', index=False)
+    people_with_diabetes_in_train_df = get_people_with_disease(train_group_df, all_diseased_column,
+                                                               diabetes_pattern)
+    print(f'people_with_diabetes_in_train_df size: {people_with_diabetes_in_train_df.shape}')
 
-people_with_diabetes_in_train_df = get_people_with_disease(train_group_df, all_diseased_column, diabetes_pattern)
-print(f'people_with_diabetes_in_train_df size: {people_with_diabetes_in_train_df.shape}')
+    people_with_pancreatic_cancer_in_train_df = get_people_with_disease(train_group_df, all_diseased_column,
+                                                                        pancreatic_cancer_pattern)
+    print(f'people_with_pancreatic_cancer_in_train_df size: {people_with_pancreatic_cancer_in_train_df.shape}')
 
-people_with_pancreatic_cancer_in_train_df = get_people_with_disease(train_group_df, all_diseased_column,pancreatic_cancer_pattern)
-print(f'people_with_pancreatic_cancer_in_train_df size: {people_with_pancreatic_cancer_in_train_df.shape}')
+    total_number_of_patients_in_train = people_with_diabetes_in_train_df.shape[0] + \
+                                        people_with_pancreatic_cancer_in_train_df.shape[0]
+    print(f'total_number_of_patients_in_train size: {total_number_of_patients_in_train}')
 
-total_number_of_patients_in_train = people_with_diabetes_in_train_df.shape[0] + people_with_pancreatic_cancer_in_train_df.shape[0]
-print(f'total_number_of_patients_in_train size: {total_number_of_patients_in_train}')
+    train_group_df = chunk.drop(people_with_diabetes_in_train_df.index)
+    train_group_df = chunk.drop(people_with_pancreatic_cancer_in_train_df.index)
+    train_group_df = chunk.sample(n=total_number_of_patients_in_train)
+    train_group_df = pd.concat(
+        [train_group_df, people_with_diabetes_in_train_df, people_with_pancreatic_cancer_in_train_df])
 
-train_group_df = df.drop(people_with_diabetes_in_train_df.index)
-train_group_df = df.drop(people_with_pancreatic_cancer_in_train_df.index)
-train_group_df = df.sample(n=total_number_of_patients_in_train)
-train_group_df = pd.concat([train_group_df, people_with_diabetes_in_train_df, people_with_pancreatic_cancer_in_train_df])
+    train_group_df.to_csv('train_data.csv', mode='a', index=False)
 
-train_group_df.to_csv('train_data.csv', index=False)
+print(f'finished loading dataset {biobank_path}')
+
