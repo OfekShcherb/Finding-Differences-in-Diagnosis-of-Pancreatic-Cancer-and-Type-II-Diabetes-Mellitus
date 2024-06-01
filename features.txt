@@ -10,9 +10,6 @@ eid	eid
 2306	Weight change compared with 1 year ago
 21001	Body mass index (BMI)
 20116	Smoking Status
-131682	Date K85 first reported (acute pancreatitis)  ?
-131683	Source of report of K85 (acute pancreatitis)  ?
-130792	Date E66 first reported (obesity)
 28649	Length of time suffering from abdominal pain/tummy ache 
 21028	Frequency of discomfort/pain getting better or stopping after a bowel movement
 21040	Satisfaction with bowel habits
