@@ -28,6 +28,8 @@ for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
     chunk = pd.concat([chunk_ukb672220, chunk_ukb673316, chunk_ukb673540], axis=1)
     chunk[diagnosis_codes] = chunk[diagnosis_codes].fillna('-1')
     all_diseased_column = chunk[diagnosis_codes].agg(', '.join, axis=1)
+    chunk.drop(diagnosis_codes, axis=1)
+    chunk['Diagnoses'] = all_diseased_column
 
     test_group_df = chunk.sample(n=chunk.shape[0]//5)
     test_group_df.to_csv('test_data.csv', mode='a', index=False)
