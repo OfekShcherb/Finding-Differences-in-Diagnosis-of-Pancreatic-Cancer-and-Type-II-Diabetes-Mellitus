@@ -1,0 +1,30 @@
+Diagnoses - ICD10
+Persistent or recurrent tiredness, weariness or fatigue that has lasted for at least 6 months
+Length of time suffering from mild fatigue
+Length of time suffering from severe fatigue
+Tiredness, weariness or fatigue goes away when resting
+Experienced episodes of overeating/binge eating during time(s) of low weight ?
+Weight change compared with 1 year ago
+Smoking Status
+Length of time suffering from abdominal pain/tummy ache 
+Frequency of discomfort/pain getting better or stopping after a bowel movement
+Satisfaction with bowel habits
+Illnesses of father
+Illnesses of mother
+Illnesses of siblings
+Length of time suffering from nausea and/or vomiting
+Currently suffering from nausea and/or vomiting
+Abdominal discomfort/pain for 6 months or longer
+Diagnosed with coeliac disease or gluten sensitivity
+Sensitive stomach
+Tiredness after waking
+Number of times woke up in the night during the past month
+Overall quality of sleep in past month
+Trouble sleeping in past month as need to use the bathroom
+Duration of strenuous sports
+Alcohol intake frequency
+Mood swings
+Tense / 'highly strung'
+Loneliness, isolation
+Processed meat intake
+Antigen assay QC indicator
