@@ -2,10 +2,30 @@ import json
 import pandas as pd
 
 
+diabetes_pattern = r'E11'
+pancreatic_cancer_pattern = r'C25'
+pancreatic_cancer = 1
+diabetes = 2
+control = 0
+
+
 def get_people_with_disease(df, all_diseased_column, disease_code_pattern):
     people_with_disease_df = df[all_diseased_column.str.contains(disease_code_pattern)]
 
     return people_with_disease_df
+
+
+def label_chunk_to_diseases(chunk):
+    chunk["label"] = chunk['Diagnoses'].apply(classify_diseases)
+
+
+def classify_diseases(diseases):
+    label = control
+    if diseases.contains(pancreatic_cancer_pattern):
+        label = pancreatic_cancer
+    elif diseases.str.contains(diabetes_pattern):
+        label = diabetes
+    return label
 
 
 print('loading config')
@@ -30,17 +50,11 @@ for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
     all_diseased_column = chunk[diagnosis_codes].agg(', '.join, axis=1)
     chunk.drop(diagnosis_codes, axis=1)
     chunk['Diagnoses'] = all_diseased_column
+    label_chunk_to_diseases(chunk)
 
     test_group_df = chunk.sample(n=chunk.shape[0]//5)
     test_group_df.to_csv('test_data.csv', mode='a', index=False)
     train_group_df = chunk.drop(test_group_df.index)
-
-    diabetes_pattern = r'E11'
-    # people_with_diabetes_in_test_df = get_people_with_disease(test_group_df, all_diseased_column, diabetes_pattern)
-
-    pancreatic_cancer_pattern = r'C25'
-    # people_with_pancreatic_cancer_in_test_df = get_people_with_disease(test_group_df, all_diseased_column,
-    #                                                                   pancreatic_cancer_pattern)
 
     people_with_diabetes_in_train_df = get_people_with_disease(train_group_df, all_diseased_column,
                                                                diabetes_pattern)
@@ -55,8 +69,8 @@ for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
     print(f'total_number_of_patients_in_train size: {total_number_of_patients_in_train}')
 
     train_group_df = chunk.drop(people_with_diabetes_in_train_df.index)
-    train_group_df = chunk.drop(people_with_pancreatic_cancer_in_train_df.index)
-    train_group_df = chunk.sample(n=total_number_of_patients_in_train)
+    train_group_df = train_group_df.drop(people_with_pancreatic_cancer_in_train_df.index)
+    train_group_df = train_group_df.sample(n=total_number_of_patients_in_train)
     train_group_df = pd.concat(
         [train_group_df, people_with_diabetes_in_train_df, people_with_pancreatic_cancer_in_train_df])
 
