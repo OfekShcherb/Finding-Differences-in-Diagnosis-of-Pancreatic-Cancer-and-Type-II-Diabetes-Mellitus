@@ -16,7 +16,7 @@ def get_people_with_disease(df, all_diseased_column, disease_code_pattern):
 
 
 def label_chunk_to_diseases(chunk):
-    chunk["label"] = chunk['Diagnoses'].apply(classify_diseases)
+    chunk["Label"] = chunk['Diagnoses'].apply(classify_diseases)
 
 
 def classify_diseases(diseases):
