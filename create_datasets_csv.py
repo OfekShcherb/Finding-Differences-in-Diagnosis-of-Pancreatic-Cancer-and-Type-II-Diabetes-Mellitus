@@ -1,5 +1,8 @@
 import json
 import pandas as pd
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 diabetes_pattern = r'E11'
@@ -21,9 +24,9 @@ def label_chunk_to_diseases(chunk):
 
 def classify_diseases(diseases):
     label = control
-    if diseases.contains(pancreatic_cancer_pattern):
+    if pancreatic_cancer_pattern in diseases:
         label = pancreatic_cancer
-    elif diseases.str.contains(diabetes_pattern):
+    elif diabetes_pattern in diseases:
         label = diabetes
     return label
 
@@ -56,12 +59,10 @@ for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
     test_group_df.to_csv('test_data.csv', mode='a', index=False)
     train_group_df = chunk.drop(test_group_df.index)
 
-    people_with_diabetes_in_train_df = get_people_with_disease(train_group_df, all_diseased_column,
-                                                               diabetes_pattern)
+    people_with_diabetes_in_train_df = train_group_df[train_group_df['Label'] == 2]
     print(f'people_with_diabetes_in_train_df size: {people_with_diabetes_in_train_df.shape}')
 
-    people_with_pancreatic_cancer_in_train_df = get_people_with_disease(train_group_df, all_diseased_column,
-                                                                        pancreatic_cancer_pattern)
+    people_with_pancreatic_cancer_in_train_df = train_group_df[train_group_df['Label'] == 1]
     print(f'people_with_pancreatic_cancer_in_train_df size: {people_with_pancreatic_cancer_in_train_df.shape}')
 
     total_number_of_patients_in_train = people_with_diabetes_in_train_df.shape[0] + \
