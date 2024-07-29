@@ -2,30 +2,22 @@ eid	eid
 41270	Diagnoses - ICD10
 120114	Persistent or recurrent tiredness, weariness or fatigue that has lasted for at least 6 months
 2966	Age high blood pressure diagnosed
-34	Yead of birth
-28697	Length of time suffering from mild fatigue
-28700	Length of time suffering from severe fatigue
+34	Year of birth
 120115	Tiredness, weariness or fatigue goes away when resting
-29134	Experienced episodes of overeating/binge eating during time(s) of low weight ?
 2306	Weight change compared with 1 year ago
 21001	Body mass index (BMI)
 20116	Smoking Status
-28649	Length of time suffering from abdominal pain/tummy ache 
 21028	Frequency of discomfort/pain getting better or stopping after a bowel movement
 21040	Satisfaction with bowel habits
 20107	Illnesses of father
 20110	Illnesses of mother
 20111	Illnesses of siblings
-28604	Length of time suffering from nausea and/or vomiting
-28603	Currently suffering from nausea and/or vomiting
 21027	Abdominal discomfort/pain for 6 months or longer
 21068	Diagnosed with coeliac disease or gluten sensitivity
 21064	Sensitive stomach
 30010	Red blood cell (erythrocyte) count
 30000	White blood cell (leukocyte) count
 30020	Haemoglobin concentration
-26285	Standard PRS for type 2 diabetes (T2D)
-26286	Enhanced PRS for type 2 diabetes (T2D)
 23099	Body fat percentage
 23127	Trunk fat percentage
 30510	Creatinine (enzymatic) in urine
@@ -85,12 +77,6 @@ eid	eid
 30880	Urate
 30670	Urea
 30890	Vitamin D
-30426	Tiredness after waking
-30445	How many hours of actual sleep each night during the past month
-30443	Length of time to get to sleep during the past month
-30462	Number of times woke up in the night during the past month
-30467	Overall quality of sleep in past month
-30448	Trouble sleeping in past month as need to use the bathroom
 894	Duration of moderate activity
 1001	Duration of strenuous sports
 914	Duration of vigorous activity
@@ -109,7 +95,6 @@ eid	eid
 23000	1gG antigen for Herpes Simplex virus-1
 23001	2mgG unique antigen for Herpes Simplex virus-2
 23049	Antigen assay QC indicator
-23048	Antigen assay date
 23026	BK VP1 antigen for Human Polyomavirus BKV
 23039	CagA antigen for Helicobacter pylori
 23043	Catalase antigen for Helicobacter pylori
@@ -162,5 +147,4 @@ eid	eid
 23528	Free Cholesterol in IDL
 23421	Free Cholesterol in LDL
 23420	Free Cholesterol in VLDL
-23406	HDL Cholesterol
 23405	LDL Cholesterol

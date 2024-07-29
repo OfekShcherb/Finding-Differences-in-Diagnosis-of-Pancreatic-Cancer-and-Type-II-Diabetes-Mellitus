@@ -21,16 +21,17 @@ with open(features_file_path) as f:
         except IndexError:
             pass
         if 'Categorical' in feature_value_type:
-            categorical_features.append(feature_name)
+            categorical_features.append(feature_name.strip())
         else:
-            numerical_features.append(feature_name)
+            numerical_features.append(feature_name.strip())
 
 data = {
     'categorical_features': categorical_features,
     'numerical_features': numerical_features
 }
 
+data = json.dumps(data, indent=4)
 with open('features_types.json', 'w') as output_file:
-    json.dumps(data, indent=4)
+    output_file.write(data)
 
 

@@ -1,5 +1,5 @@
 Age high blood pressure diagnosed
-Yead of birth
+Year of birth
 Body mass index (BMI)
 Red blood cell (erythrocyte) count
 White blood cell (leukocyte) count
@@ -78,7 +78,6 @@ Time spent watching television (TV)
 Water intake
 1gG antigen for Herpes Simplex virus-1
 2mgG unique antigen for Herpes Simplex virus-2
-Antigen assay date
 BK VP1 antigen for Human Polyomavirus BKV
 CagA antigen for Helicobacter pylori
 Catalase antigen for Helicobacter pylori

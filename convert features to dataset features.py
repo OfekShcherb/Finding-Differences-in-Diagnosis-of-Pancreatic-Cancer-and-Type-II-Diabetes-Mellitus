@@ -11,7 +11,8 @@ biobank_fields_paths = [
         "/home/ofeksh2@mta.ac.il/biobank/fields672220.ukb",
         "/home/ofeksh2@mta.ac.il/biobank/fields673316.ukb",
     ]
-
+train_path = '/tmp/pycharm_project_366/train_data.csv'
+test_path = '/tmp/pycharm_project_366/test_data.csv'
 biobank_fields_sets = []
 for path in biobank_fields_paths:
     with open(path) as fields_file:
@@ -31,6 +32,7 @@ with open('/tmp/pycharm_project_366/features.txt') as features_file:
         feature_code, feature_name = line.split('\t')
         feature_name = feature_name.replace('\n', '')
         if feature_name == 'eid':
+            features_code_lists[0].append('eid')
             continue
 
         size = features_with_array[feature_code]
@@ -48,6 +50,8 @@ with open('/tmp/pycharm_project_366/features.txt') as features_file:
 
 config = {
     'biobank_paths': biobank_paths,
+    'train_path': train_path,
+    'test_path': test_path,
     'features_code_lists': features_code_lists,
     'features_name_list': features_name_list
 }
