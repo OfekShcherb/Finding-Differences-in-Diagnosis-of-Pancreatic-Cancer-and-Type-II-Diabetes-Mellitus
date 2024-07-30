@@ -12,7 +12,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import GridSearchCV
 import pickle
-from sklearn.utils.class_weight import compute_class_weight
 
 def classify_disease(diseases_column, disease_pattern):
     return diseases_column.str.contains(disease_pattern)
@@ -104,27 +103,22 @@ train_df = pd.concat([train_df, one_hot_encoding], axis=1)
 train_df = train_df.drop(columns=categorical_features)
 train_df = train_df.drop(columns=['Glycated haemoglobin (HbA1c) - 0'])
 
-y_train = train_df['Label']
-x_train = train_df.drop(['Label', 'eid'], axis=1)
-
-param_grid = {
-    'n_estimators': [100, 200, 300],
-    'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4],
-    'bootstrap': [True, False]
-}
-
-class_weights = compute_class_weight('balanced', classes=np.unique(y_train), y=y_train)
-print(class_weights)
-sample_weights = [class_weights[y] for y in y_train]
-gbc_model = GradientBoostingClassifier()
-#grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2, scoring='accuracy')
-gbc_model.fit(x_train, y_train, sample_weight=sample_weights)
-#grid_search.fit(x,y)
-best_model = gbc_model
-
-pickle.dump(best_model, open('/tmp/pycharm_project_366/Models/Best_Model_GBC_with_Weights.pk1', 'wb'))
 pickle.dump(one_hot_encoder, open('/tmp/pycharm_project_366/Models/One_Hot_Encoder.pk1', 'wb'))
 pickle.dump(mean_imputer, open('/tmp/pycharm_project_366/Models/Mean_Imputer.pk1', 'wb'))
 pickle.dump(categorical_imputer, open('/tmp/pycharm_project_366/Models/Categorical_Imputer.pk1', 'wb'))
+
+train_cancer_healthy = train_df[train_df['Label'] != 2]
+train_T2D_healthy = train_df[train_df['Label'] != 1]
+train_cancer_T2D = train_df[train_df['Label'] != 0]
+
+dfs = [train_cancer_healthy, train_T2D_healthy, train_cancer_T2D]
+names = ['cancer_healthy', 'T2D_healthy', 'cancer_T2D']
+for df, name in zip(dfs, names):
+    print('Training ' + name)
+    x_train = df.drop(['Label', 'eid'], axis=1)
+    y_train = df['Label']
+
+    gbc_model = GradientBoostingClassifier()
+    gbc_model.fit(x_train, y_train)
+
+    pickle.dump(gbc_model, open(f'/tmp/pycharm_project_366/Models/{name}.pk1', 'wb'))
