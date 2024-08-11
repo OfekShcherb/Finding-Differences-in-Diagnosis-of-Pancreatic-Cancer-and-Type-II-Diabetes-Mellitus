@@ -18,6 +18,8 @@ for path in biobank_fields_paths:
         biobank_fields_set = set(fields_file.read().split('\n'))
         biobank_fields_sets.append(biobank_fields_set)
 
+models_path = '/home/ofeksh2@mta.ac.il/models'
+
 mean_imputer_path = '/home/ofeksh2@mta.ac.il/models/mean_imputer.pkl'
 categorical_imputer_path = '/home/ofeksh2@mta.ac.il/models/categorical_imputer.pkl'
 one_hot_encoder_path = '/home/ofeksh2@mta.ac.il/models/one_hot_encoder.pkl'
@@ -54,6 +56,7 @@ config = {
     'biobank_paths': biobank_paths,
     'mean_imputer_path': mean_imputer_path,
     'categorical_imputer_path': categorical_imputer_path,
+    'models_path': models_path,
     'one_hot_encoder_path': one_hot_encoder_path,
     'features_code_lists': features_code_lists,
     'features_name_list': features_name_list,

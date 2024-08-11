@@ -2,9 +2,12 @@ import pandas as pd
 import numpy as np
 import json
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils import compute_class_weight
+from sklearn.metrics import f1_score
 import pickle
 
 
@@ -78,21 +81,62 @@ train_df = preprocessing(train_df, config)
 y_train = train_df['Label']
 x_train = train_df.drop(columns=['Label'])
 
-param_grid = {
-    'n_estimators': [100, 200, 300],
-    'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4],
-    'bootstrap': [True, False]
-}
+
+models = [RandomForestClassifier(), GradientBoostingClassifier(), MLPClassifier(), KNeighborsClassifier(), SVC()]
+
+param_grids = [
+    {
+        'n_estimators': [100, 200, 300],
+        'max_depth': [None, 10, 20, 30],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+        'bootstrap': [True, False],
+    },
+    {
+        'n_estimators': [100, 200, 300],
+        'learning_rate': [0.01, 0.05, 0.1, 0.2],
+        'max_depth': [3, 4, 5, 6],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+        'subsample': [0.8, 0.9, 1.0],
+        'max_features': ['sqrt', 'log2', None],
+        'loss': ['deviance', 'exponential'],
+    },
+    {
+        'neurons_per_layer': [(128, 64), (128, 64, 32), (128, 64, 32, 16), (256, 128, 64), (256, 128, 64, 32)],
+        'activation': ['relu', 'tanh'],
+        'optimizer': ['adam', 'sgd', 'rmsprop'],
+        'learning_rate': [0.001, 0.01, 0.1],
+        'epochs': [50, 100, 200],
+        'dropout_rate': [0.2, 0.3, 0.4, 0.5],
+        'l2_reg': [0.0001, 0.001, 0.01],
+        'batch_norm': [True, False],
+    },
+    {
+        'n_neighbors': [3, 5, 7, 9, 11],
+        'weights': ['uniform', 'distance'],
+        'metric': ['euclidean', 'manhattan', 'minkowski'],
+        'p': [1, 2],
+        'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
+        'leaf_size': [10, 30, 50],
+    },
+    {
+        'C': [0.1, 1, 10, 100, 1000],
+        'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
+        'gamma': ['scale', 'auto', 0.001, 0.01, 0.1, 1],
+        'degree': [2, 3, 4],
+        'coef0': [0.0, 0.1, 0.5, 1.0],
+    }
+]
+
+for i, model, param_grid in enumerate(zip(models, param_grids)):
+    print(f'Fitting {i}...')
+    grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=3, n_jobs=-1, verbose=1, scoring=f1_score())
+    grid_search.fit(x_train, y_train)
+    best_model = grid_search.best_estimator_
+    with open(f"config['models_path']/{i}.pkl", 'wb') as f:
+        pickle.dump(best_model, f)
 
 class_weights = compute_class_weight('balanced', classes=np.unique(y_train), y=y_train)
 print(class_weights)
 sample_weights = [class_weights[y] for y in y_train]
-mlp_model = MLPClassifier(hidden_layer_sizes=(128, 64))
-#grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2, scoring='accuracy')
-mlp_model.fit(x_train, y_train)
-#grid_search.fit(x,y)
-best_model = mlp_model
-
-pickle.dump(best_model, open('/home/ofeksh2@mta.ac.il/models/Best_Model_MLP.pk1', 'wb'))

@@ -70,7 +70,6 @@ for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
         non_sick_in_train = non_sick_in_train + 1
     if counter % 10000 == 0:
         print(counter)
-
     counter += 1
 
 
