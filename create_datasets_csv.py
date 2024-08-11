@@ -34,7 +34,7 @@ def classify_diseases(diseases):
 
 
 print('loading config')
-with open('/tmp/pycharm_project_366/config.json', 'r', encoding='utf-8') as f:
+with open('/home/ofeksh2@mta.ac.il/config_files/config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 biobank_paths = config['biobank_paths']

@@ -1,4 +1,3 @@
-eid	eid
 41270	Diagnoses - ICD10
 120114	Persistent or recurrent tiredness, weariness or fatigue that has lasted for at least 6 months
 2966	Age high blood pressure diagnosed

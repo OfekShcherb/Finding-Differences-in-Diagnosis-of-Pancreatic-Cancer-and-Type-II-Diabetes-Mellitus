@@ -18,20 +18,24 @@ for path in biobank_fields_paths:
         biobank_fields_set = set(fields_file.read().split('\n'))
         biobank_fields_sets.append(biobank_fields_set)
 
+mean_imputer_path = '/home/ofeksh2@mta.ac.il/models/mean_imputer.pkl'
+categorical_imputer_path = '/home/ofeksh2@mta.ac.il/models/categorical_imputer.pkl'
+one_hot_encoder_path = '/home/ofeksh2@mta.ac.il/models/one_hot_encoder.pkl'
+
+features_type_path = '/home/ofeksh2@mta.ac.il/config_files/features_types.pkl'
+
 features_code_lists = [[], [], []]
 features_name_list = []
 features_with_array = defaultdict(lambda: 1)
-with open('/tmp/pycharm_project_366/features_with_arrays.txt') as f:
+with open('/home/ofeksh2@mta.ac.il/config_files/features_with_arrays.txt') as f:
     for line in f:
         feature_code, array_size = line.split()
         features_with_array[feature_code] = int(array_size)
 
-with open('/tmp/pycharm_project_366/features.txt') as features_file:
+with open('/home/ofeksh2@mta.ac.il/config_files/features.txt') as features_file:
     for line in features_file:
         feature_code, feature_name = line.split('\t')
         feature_name = feature_name.replace('\n', '')
-        if feature_name == 'eid':
-            continue
 
         size = features_with_array[feature_code]
         if feature_code in biobank_fields_sets[0]:
@@ -48,12 +52,16 @@ with open('/tmp/pycharm_project_366/features.txt') as features_file:
 
 config = {
     'biobank_paths': biobank_paths,
+    'mean_imputer_path': mean_imputer_path,
+    'categorical_imputer_path': categorical_imputer_path,
+    'one_hot_encoder_path': one_hot_encoder_path,
     'features_code_lists': features_code_lists,
-    'features_name_list': features_name_list
+    'features_name_list': features_name_list,
+    'features_types': features_type_path,
 }
 
 data = json.dumps(config, indent=4)
 
-with open('/tmp/pycharm_project_366/config.json', 'w') as output_file:
+with open('/home/ofeksh2@mta.ac.il/config_files/config.json', 'w') as output_file:
     output_file.write(data)
 
