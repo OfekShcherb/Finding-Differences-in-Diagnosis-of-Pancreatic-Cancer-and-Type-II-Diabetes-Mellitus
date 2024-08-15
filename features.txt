@@ -2,15 +2,13 @@
 120114	Persistent or recurrent tiredness, weariness or fatigue that has lasted for at least 6 months
 2966	Age high blood pressure diagnosed
 34	Year of birth
+31	Sex
 120115	Tiredness, weariness or fatigue goes away when resting
 2306	Weight change compared with 1 year ago
 21001	Body mass index (BMI)
 20116	Smoking Status
 21028	Frequency of discomfort/pain getting better or stopping after a bowel movement
 21040	Satisfaction with bowel habits
-20107	Illnesses of father
-20110	Illnesses of mother
-20111	Illnesses of siblings
 21027	Abdominal discomfort/pain for 6 months or longer
 21068	Diagnosed with coeliac disease or gluten sensitivity
 21064	Sensitive stomach

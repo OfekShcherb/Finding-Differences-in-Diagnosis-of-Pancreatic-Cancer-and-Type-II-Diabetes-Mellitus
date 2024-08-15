@@ -1,7 +1,7 @@
 import json
 import random
-
 import pandas as pd
+import os
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -39,7 +39,6 @@ with open('/home/ofeksh2@mta.ac.il/config_files/config.json', 'r', encoding='utf
 
 biobank_paths = config['biobank_paths']
 features_code_lists = config['features_code_lists']
-features_name_list = config['features_name_list']
 diagnosis_codes = [f'41270-0.{i}' for i in range(100)]
 print('loading dataset')
 chunk_size = 1
@@ -49,7 +48,7 @@ for biobank_path, features in zip(biobank_paths, features_code_lists):
     datasets_chunks.append(chunks)
 
 datasets_chunks = zip(*datasets_chunks)
-people_in_test = people_with_disease_in_train = non_sick_in_train = counter =0
+people_in_test = people_with_disease_in_train = non_sick_in_train = counter = 0
 for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
     row_of_data = pd.concat([chunk_ukb672220, chunk_ukb673316, chunk_ukb673540], axis=1)
     row_of_data[diagnosis_codes] = row_of_data[diagnosis_codes].fillna('-1')
@@ -60,13 +59,22 @@ for chunk_ukb672220, chunk_ukb673316, chunk_ukb673540 in datasets_chunks:
 
     random_number = random.random()
     if random_number <= 1/5:
-        row_of_data.to_csv(config['test_path'], mode='a', index=False)
+        if os.path.isfile(config['test_path']):
+            row_of_data.to_csv(config['test_path'], mode='a', index=False, header=False)
+        else:
+            row_of_data.to_csv(config['test_path'], mode='w', index=False)
         people_in_test = people_in_test + 1
     elif (row_of_data['Label'] > 0).all():
-        row_of_data.to_csv(config['train_path'], mode='a', index=False)
+        if os.path.isfile(config['train_path']):
+            row_of_data.to_csv(config['train_path'], mode='a', index=False, header=False)
+        else:
+            row_of_data.to_csv(config['train_path'], mode='w', index=False)
         people_with_disease_in_train = people_with_disease_in_train + 1
     elif random.random() <= 1/10:
-        row_of_data.to_csv(config['train_path'], mode='a', index=False)
+        if os.path.isfile(config['train_path']):
+            row_of_data.to_csv(config['train_path'], mode='a', index=False, header=False)
+        else:
+            row_of_data.to_csv(config['train_path'], mode='w', index=False)
         non_sick_in_train = non_sick_in_train + 1
     if counter % 10000 == 0:
         print(counter)

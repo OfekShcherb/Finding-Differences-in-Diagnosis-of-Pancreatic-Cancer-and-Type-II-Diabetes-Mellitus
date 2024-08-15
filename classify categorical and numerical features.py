@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup as bs4
 import requests
 import json
 
+import Train_Model
+
 categorical_features = []
 numerical_features = []
 features_file_path = 'features.txt'
@@ -33,5 +35,4 @@ data = {
 data = json.dumps(data, indent=4)
 with open('features_types.json', 'w') as output_file:
     output_file.write(data)
-
 
