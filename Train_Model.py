@@ -64,12 +64,13 @@ def fill_nans(df, mean_imputer_path, numerical_features, categorical_imputer_pat
 
     return df
 
-def preprocessing(df, config):
+def preprocessing(df, config, scaled_data=False):
     numerical_features, categorical_features = split_numerical_and_categorical_features(config['features_types'])
     df = change_df_columns_name(df, config['features_code_lists'], config['features_name_lists'])
     df = fill_nans(df, config['mean_imputer_path'], numerical_features, config['categorical_imputer_path'],
                    categorical_features)
-    df = scale_data(df, config['standard_scalar_path'], numerical_features)
+    if scaled_data:
+        df = scale_data(df, config['standard_scalar_path'], numerical_features)
     df = encode_one_hot(df, config['one_hot_encoder_path'], categorical_features)
     columns_to_remove = ['Glycated haemoglobin (HbA1c) - 0', 'Diagnoses']
     columns_to_remove.extend([f'Diagnoses - ICD10 - {i}' for i in range(100)])
@@ -89,60 +90,18 @@ if __name__ == '__main__':
     train_path = config['train_path']
 
     train_df = pd.read_csv(train_path, low_memory=False)
+    train_df['Label'] = train_df['Label'].replace(2, 1)
+    #people_with_pancreatic_cancer = train_df[train_df['label'] == 1]
+    #healthy_people = train_df[train_df['label'] == 0].sample(n=people_with_pancreatic_cancer.shape[0])
+    #train_df = pd.concat([healthy_people, people_with_pancreatic_cancer])
 
-    train_df = preprocessing(train_df, config)
+    train_df = preprocessing(train_df, config, scaled_data=True)
 
     y_train = train_df['Label']
     x_train = train_df.drop(columns=['Label'])
 
-
     models = [RandomForestClassifier(), GradientBoostingClassifier(), MLPClassifier()]
     models_names = ['RF', 'GB', 'MLP']
-    #models_names = ['MLP']
-    #models = [MLPClassifier()]
-
-    #param_grids = [
-    #    {
-    #        'n_estimators': [100, 200, 300],
-    #        'max_depth': [None, 10, 20, 30],
-    #        'min_samples_split': [2, 5, 10],
-    #        'min_samples_leaf': [1, 2, 4],
-    #        'bootstrap': [True, False],
-    #    },
-    #    {
-    #        'n_estimators': [100, 200, 300],
-    #        'learning_rate': [0.01, 0.05, 0.1, 0.2],
-    #        'max_depth': [3, 4, 5, 6],
-    #        'min_samples_split': [2, 5, 10],
-    #        'min_samples_leaf': [1, 2, 4],
-    #        'subsample': [0.8, 0.9, 1.0],
-    #        'max_features': ['sqrt', 'log2', None],
-    #        'loss': ['log_loss', 'exponential'],
-    #    },
-    #    {
-    #        'hidden_layer_sizes': [(128, 64), (128, 64, 32), (128, 64, 32, 16), (256, 128, 64), (256, 128, 64, 32)],
-    #        'activation': ['relu', 'tanh'],
-    #        'solver': ['lbfgs', 'sgd', 'adam'],
-    #        'learning_rate': ['constant', 'invscaling', 'adaptive'],
-    #        'max_iter': [50, 100, 200],
-    #        'alpha': [0.0001, 0.001, 0.01],
-    #    },
-    #    {
-    #        'n_neighbors': [3, 5, 7, 9, 11],
-    #        'weights': ['uniform', 'distance'],
-    #        'metric': ['euclidean', 'manhattan', 'minkowski'],
-    #        'p': [1, 2],
-    #        'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],
-    #        'leaf_size': [10, 30, 50],
-    #    },
-    #    {
-    #        'C': [0.1, 1, 10, 100, 1000],
-    #        'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
-    #        'gamma': ['scale', 'auto', 0.001, 0.01, 0.1, 1],
-    #        'degree': [2, 3, 4],
-    #        'coef0': [0.0, 0.1, 0.5, 1.0],
-    #    }
-    #]
 
     param_grids = [
         {
@@ -175,13 +134,13 @@ if __name__ == '__main__':
     print(class_weights)
     sample_weights = [class_weights[y] for y in y_train]
 
-    scorer = make_scorer(pancreatic_cancer_f1)
+    #scorer = make_scorer(pancreatic_cancer_f1)
     for model, models_name, param_grid in zip(models, models_names, param_grids):
         print(f'Fitting {models_name}...')
-        grid_search = RandomizedSearchCV(estimator=model, param_distributions=param_grid, n_iter=20, cv=3, n_jobs=-1, verbose=1, scoring=scorer)
+        grid_search = RandomizedSearchCV(estimator=model, param_distributions=param_grid, n_iter=1, cv=3, n_jobs=-1, verbose=1)
         grid_search.fit(x_train, y_train)
         best_model = grid_search.best_estimator_
-        with open(f"{config['models_path']}/{models_name}_scaled_with_weighted_labels.pkl", 'wb') as f:
+        with open(f"{config['models_path']}/{models_name}_scaled_healthy_vs_sick.pkl", 'wb') as f:
             pickle.dump(best_model, f)
 
     elapsed_time = time() - start_time
