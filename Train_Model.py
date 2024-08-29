@@ -14,6 +14,32 @@ from time import time
 from datetime import timedelta
 
 
+diseases_patterns = [
+    ('Diabetes', r'E11'),
+    ('Pancreatic Cancer', r'C25'),
+    ('Obesity', r'E66'),
+    ('Acute Pancreatitis', r'K85'),
+    ('Alcoholic Liver Disease', r'K70'),
+    ('Cirrhosis', r'K74'),
+    ('Acute Hepatitis A', r'B15'),
+    ('Acute Hepatitis B', r'B16'),
+    ('Acute Hepatitis C', r'B171'),
+    ('Toxic Liver Disease', r'K71'),
+    ('Cushings Syndrome', r'E24'),
+    ('Hyperthyroidism', r'E05'),
+    ('Intestinal Malabsorption', r'K90'),
+    ('Arterial Embolism and Thrombosis', r'I74')
+]
+
+def classify_diseases(df, diagnoses):
+    for disease, disease_pattern in diseases_patterns[2:]:
+        df[f'Has {disease}'] = classify_disease(diagnoses, disease_pattern)
+
+    return df
+
+def classify_disease(diseases_column, disease_pattern):
+    return diseases_column.str.contains(disease_pattern)
+
 def pancreatic_cancer_f1(y_true, y_pred):
     return f1_score(y_true, y_pred, average='macro', labels=[1])
 
@@ -66,20 +92,19 @@ def fill_nans(df, mean_imputer_path, numerical_features, categorical_imputer_pat
 
 def preprocessing(df, config, scaled_data=False):
     numerical_features, categorical_features = split_numerical_and_categorical_features(config['features_types'])
-    df = change_df_columns_name(df, config['features_code_lists'], config['features_name_lists'])
-    df = fill_nans(df, config['mean_imputer_path'], numerical_features, config['categorical_imputer_path'],
+    proccesed_df = change_df_columns_name(df, config['features_code_lists'], config['features_name_lists'])
+    proccesed_df = fill_nans(proccesed_df, config['mean_imputer_path'], numerical_features, config['categorical_imputer_path'],
                    categorical_features)
     if scaled_data:
-        df = scale_data(df, config['standard_scalar_path'], numerical_features)
-    df = encode_one_hot(df, config['one_hot_encoder_path'], categorical_features)
-    columns_to_remove = ['Glycated haemoglobin (HbA1c) - 0', 'Diagnoses']
+        proccesed_df = scale_data(proccesed_df, config['standard_scalar_path'], numerical_features)
+    proccesed_df = classify_diseases(proccesed_df, proccesed_df['Diagnoses'])
+    proccesed_df = encode_one_hot(proccesed_df, config['one_hot_encoder_path'], categorical_features)
+    #'Glycated haemoglobin (HbA1c) - 0'
+    columns_to_remove = ['Diagnoses']
     columns_to_remove.extend([f'Diagnoses - ICD10 - {i}' for i in range(100)])
-    df = df.drop(columns=columns_to_remove)
+    proccesed_df = proccesed_df.drop(columns=columns_to_remove)
 
-    return df
-
-def classify_disease(diseases_column, disease_pattern):
-    return diseases_column.str.contains(disease_pattern)
+    return proccesed_df
 
 
 if __name__ == '__main__':
@@ -90,10 +115,8 @@ if __name__ == '__main__':
     train_path = config['train_path']
 
     train_df = pd.read_csv(train_path, low_memory=False)
-    train_df['Label'] = train_df['Label'].replace(2, 1)
-    #people_with_pancreatic_cancer = train_df[train_df['label'] == 1]
-    #healthy_people = train_df[train_df['label'] == 0].sample(n=people_with_pancreatic_cancer.shape[0])
-    #train_df = pd.concat([healthy_people, people_with_pancreatic_cancer])
+    #train_df = train_df[train_df['Label'] != 0]
+    train_df['Label'] = train_df['Label'].replace(2, 0)
 
     train_df = preprocessing(train_df, config, scaled_data=True)
 
@@ -137,10 +160,10 @@ if __name__ == '__main__':
     #scorer = make_scorer(pancreatic_cancer_f1)
     for model, models_name, param_grid in zip(models, models_names, param_grids):
         print(f'Fitting {models_name}...')
-        grid_search = RandomizedSearchCV(estimator=model, param_distributions=param_grid, n_iter=1, cv=3, n_jobs=-1, verbose=1)
+        grid_search = RandomizedSearchCV(estimator=model, param_distributions=param_grid, n_iter=20, cv=3, n_jobs=-1, verbose=1, scoring='f1_weighted')
         grid_search.fit(x_train, y_train)
         best_model = grid_search.best_estimator_
-        with open(f"{config['models_path']}/{models_name}_scaled_healthy_vs_sick.pkl", 'wb') as f:
+        with open(f"{config['models_path']}/{models_name}_scaled_cancer_vs_rest.pkl", 'wb') as f:
             pickle.dump(best_model, f)
 
     elapsed_time = time() - start_time
